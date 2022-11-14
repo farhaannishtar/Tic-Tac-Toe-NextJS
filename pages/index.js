@@ -146,7 +146,7 @@ export default function Home({ isConnected }) {
     
     <div className="container">
       <Head>
-        <title>Create Next App</title>
+        <title>Tic Tac Toe</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -161,6 +161,7 @@ export default function Home({ isConnected }) {
         </div>
       <button className={styles.button} onClick={restart}>Restart</button>
       </div>
+      This game can be played two player online
     </div>
   )
 }
