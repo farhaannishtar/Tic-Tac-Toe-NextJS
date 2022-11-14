@@ -41,14 +41,14 @@ export default function Home({ isConnected }) {
       const boardValuesFromDB = await fetch('/api/fetchValues');
       const boardValuesJson = await boardValuesFromDB.json();
       let values = [];
-      console.log("boardValuesJson[0]: ", boardValuesJson[0])
+      // console.log("boardValuesJson[0]: ", boardValuesJson[0])
       boardValuesJson[0].values.forEach(obj => {
         values.push(obj.value)
       })
       setXTurn(boardValuesJson[0].xTurn);
       setBoardValues(values);
     })();
-  });
+  }, [boardValues]);
 
   const updateBoard =  async (id, value, xTurn) => {
       const response = await fetch("/api/updateValue", {
@@ -80,7 +80,8 @@ export default function Home({ isConnected }) {
 
   const handleSquareClick = (position, message) => {
     console.log(`${position} I've been clicked`);
-    
+    const emptyBoard = ['-', '-', '-', '-', '-', '-','-', '-', '-']
+
     let cloneBoardValues = [...boardValues];
     if (cloneBoardValues[position] !== '-') {
       console.log('cloneBoardValues[position] !== '-'')
@@ -102,10 +103,11 @@ export default function Home({ isConnected }) {
     let winner = determineWinner(cloneBoardValues);
     if (winner === 'X' && winner !== '-') {
       setXwins(XWins + 1);
-      // resetBoard();
+      console.log("HERE??")
+      resetBoard(emptyBoard);
     } else if (winner === 'O' && winner !== '-') {
       setOwins(OWins + 1);
-      // resetBoard();
+      resetBoard(emptyBoard);
     }
     setWinner(winner);
   }
@@ -132,7 +134,7 @@ export default function Home({ isConnected }) {
     const data = await response.json();
   }
 
-  function computerMode() {
+  function restart() {
     const emptyBoard = ['-', '-', '-', '-', '-', '-','-', '-', '-']
     resetBoard(emptyBoard);
     setOwins(0);
@@ -157,7 +159,7 @@ export default function Home({ isConnected }) {
             <h3>The Winner: {winner}</h3>
           </div>
         </div>
-      <button className={styles.button} onClick={computerMode}>Reset Board</button>
+      <button className={styles.button} onClick={restart}>Restart</button>
       </div>
     </div>
   )

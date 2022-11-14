@@ -3,7 +3,6 @@ import { ObjectId } from 'mongodb'
 
 export default async function handler(request, response) {
   try {
-
     console.log("request.body: ", request.body);
     let  { id, value, xTurn } = request.body;
     console.log("id: ", id, "value: ", value, "xTurn: ", xTurn);
