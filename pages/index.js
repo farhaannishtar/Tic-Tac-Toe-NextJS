@@ -156,7 +156,9 @@ export default function Home({ isConnected }) {
         </div>
       <button className={styles.button} onClick={restart}>Restart</button>
       </div>
-      This game can be played two player online
+      <div className={styles.description}>
+        This game can be played two player online
+      </div>
     </div>
   )
 }

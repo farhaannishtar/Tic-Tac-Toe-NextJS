@@ -22,3 +22,7 @@
   cursor: pointer;
   border-color: gray;
 }
+
+.description {
+  margin-left: 50px;
+}
