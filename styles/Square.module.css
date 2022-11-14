@@ -1,0 +1,7 @@
+.square {
+  padding: 0 2rem;
+  border: 1px solid gray;
+  background-color: rgb(6, 6, 17);
+  height: 3rem;
+  width: 3rem;
+}

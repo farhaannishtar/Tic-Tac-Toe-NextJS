@@ -1,0 +1,24 @@
+.container {
+  background-color: black;
+  margin: 50px 50px 50px 100px;
+}
+
+.container2 {
+  display: flex;
+}
+
+.scoreboard {
+  margin-left: 75px;
+  margin-bottom: 30px;
+}
+
+.button {
+  background-color: black;
+  color: white;
+  font-size: 15px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  margin: 10px 0px;
+  cursor: pointer;
+  border-color: gray;
+}

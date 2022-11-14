@@ -1,0 +1,9 @@
+.board {
+  padding: 0 0rem;
+  /* border: 3px solid red;  */
+  background-color: black;
+  height: 10rem;
+  width: 10rem;
+  display: flex;
+  /* border-color: gray; */
+}
