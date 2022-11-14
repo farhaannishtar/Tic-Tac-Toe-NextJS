@@ -1,7 +1,4 @@
 export default function determineWinner(boardValues) {
-  
-  console.log('I\'m going to be fine');
-
   // Horizontal
   if (boardValues[0] === boardValues[1] && boardValues[0] === boardValues[2]) {
     if (boardValues[0] !== '-') {

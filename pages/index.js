@@ -37,17 +37,18 @@ export default function Home({ isConnected }) {
   const [winner, setWinner] = useState('');
 
   useEffect(() => {
-    (async () => {
+    const fetchValues = async () => {
       const boardValuesFromDB = await fetch('/api/fetchValues');
       const boardValuesJson = await boardValuesFromDB.json();
       let values = [];
-      // console.log("boardValuesJson[0]: ", boardValuesJson[0])
       boardValuesJson[0].values.forEach(obj => {
         values.push(obj.value)
       })
       setXTurn(boardValuesJson[0].xTurn);
       setBoardValues(values);
-    })();
+      console.log("I am hard-working")
+    };
+    fetchValues();
   }, [boardValues]);
 
   const updateBoard =  async (id, value, xTurn) => {
@@ -74,9 +75,7 @@ export default function Home({ isConnected }) {
           "application/json",
         },
       });
-      const data = await response.json();
   };
-
 
   const handleSquareClick = (position, message) => {
     console.log(`${position} I've been clicked`);
@@ -98,8 +97,6 @@ export default function Home({ isConnected }) {
     }
     setBoardValues(cloneBoardValues);
     
-    
-    
     let winner = determineWinner(cloneBoardValues);
     if (winner === 'X' && winner !== '-') {
       setXwins(XWins + 1);
@@ -115,12 +112,10 @@ export default function Home({ isConnected }) {
   const resetBoard =  async (emptyBoard) => {
     setBoardValues(['-', '-', '-', '-', '-', '-','-', '-', '-',])
     const boardValueObj = {}
-    console.log("boardValues: ", boardValues)
     emptyBoard.forEach((boardValue, index) => {
       boardValueObj[index] = boardValue;
     })
 
-    console.log("boardValueObj: ", boardValueObj)
     const response = await fetch("/api/resetBoard", {
       method: "PUT",
       body: JSON.stringify({ boardValueObj }),
