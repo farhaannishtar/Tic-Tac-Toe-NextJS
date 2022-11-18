@@ -46,61 +46,75 @@ export default function Home({ isConnected }) {
       })
       setXTurn(boardValuesJson[0].xTurn);
       setBoardValues(values);
-      console.log("I am hard-working")
+      // console.log("Inside UseEffect")
     };
     fetchValues();
-  }, [boardValues]);
+  }, [])
 
-  const updateBoard =  async (id, value, xTurn) => {
-      const response = await fetch("/api/updateValue", {
-        method: "PUT",
-        body: JSON.stringify({
-          id: id,
-          value: value,
-        }),
-        headers: 
-        {
-          "Content-Type": 
-          "application/json",
-        },
-      });
-      const responseUserTurn = await fetch("/api/updateTurn", {
-        method: "PUT",
-        body: JSON.stringify({
-          xTurn: xTurn 
-        }),
-        headers: 
-        {
-          "Content-Type": 
-          "application/json",
-        },
-      });
+  
+  const updateBoard =  async (id, value) => {
+    const response = await fetch("/api/updateValue", {
+      method: "PUT",
+      body: JSON.stringify({
+        id: id,
+        value: value,
+      }),
+      headers: 
+      {
+        "Content-Type": 
+        "application/json",
+      },
+    });
+  };
+  const updateTurn =  async (XTurn) => {
+    const responseUserTurn = await fetch("/api/updateTurn", {
+      method: "PUT",
+      body: JSON.stringify({
+        XTurn: XTurn
+      }),
+      headers: 
+      {
+        "Content-Type": 
+        "application/json",
+      },
+    });
+  };
+  
+  const getBoardValues = async () => {
+    const boardValuesFromDB = await fetch('/api/fetchValues');
+    const boardValuesJson = await boardValuesFromDB.json();
+    let values = [];
+    boardValuesJson[0].values.forEach(obj => {
+      values.push(obj.value)
+    })
+    setXTurn(boardValuesJson[0].XTurn);
+    setBoardValues(values);
+    return true;
   };
 
-  const handleSquareClick = (position, message) => {
-    console.log(`${position} I've been clicked`);
+  const handleSquareClick = async (position) => {
     const emptyBoard = ['-', '-', '-', '-', '-', '-','-', '-', '-']
 
     let cloneBoardValues = [...boardValues];
     if (cloneBoardValues[position] !== '-') {
-      console.log('cloneBoardValues[position] !== '-'')
       return;
     }
     if (XTurn) {
       cloneBoardValues[position] = 'X';
-      updateBoard(position, 'X', XTurn)
-      setXTurn(false) 
+      await updateBoard(position, 'X')
+      await updateTurn(XTurn)
+      await getBoardValues();
     } else {
       cloneBoardValues[position] = 'O';
-      updateBoard(position, 'O')
-      setXTurn(true) 
+      await updateBoard(position, 'O')
+      await updateTurn(XTurn);
+      await getBoardValues();
     }
-    setBoardValues(cloneBoardValues);
-    
+
+
     let winner = determineWinner(cloneBoardValues);
     if (winner === 'X' && winner !== '-') {
       setXwins(XWins + 1);
-      console.log("HERE??")
       resetBoard(emptyBoard);
     } else if (winner === 'O' && winner !== '-') {
       setOwins(OWins + 1);
@@ -110,7 +124,7 @@ export default function Home({ isConnected }) {
   }
 
   const resetBoard =  async (emptyBoard) => {
-    setBoardValues(['-', '-', '-', '-', '-', '-','-', '-', '-',])
+    setBoardValues(['-', '-', '-', '-', '-', '-','-', '-', '-'])
     const boardValueObj = {}
     emptyBoard.forEach((boardValue, index) => {
       boardValueObj[index] = boardValue;
@@ -125,13 +139,13 @@ export default function Home({ isConnected }) {
         "application/json",
       },
     });
-
     const data = await response.json();
   }
 
   function restart() {
     const emptyBoard = ['-', '-', '-', '-', '-', '-','-', '-', '-']
     resetBoard(emptyBoard);
+    console.log("resetBoard: ", boardValues);
     setOwins(0);
     setXwins(0);
     setWinner('');
@@ -150,6 +164,7 @@ export default function Home({ isConnected }) {
         <div className={styles.container2}>
           <Board boardValues={boardValues} handleSquareClick={handleSquareClick}/>
           <div className={styles.scoreboard}>
+            <h3>Turn: {XTurn ? <p>X</p> : <p> O </p>}</h3>
             <h3>O wins: {OWins} X wins: {XWins}</h3>
             <h3>The Winner: {winner}</h3>
           </div>
